@@ -1,20 +1,29 @@
 version: '3'
 services:
   app:
-    build:
-      context: .
+    build: .
     ports:
       - "3000:3000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/student_registration_db
     depends_on:
-      - mongo
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
+      - db
     volumes:
-      - mongodb_data:/data/db
+      - .:/app
+    networks:
+      - student_registration_app_network
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: student_registration
+      POSTGRES_USER: student_registration
+      POSTGRES_PASSWORD: student_registration
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - student_registration_app_network
 
 volumes:
-  mongodb_data:
+  postgres_data:
+networks:
+  student_registration_app_network:

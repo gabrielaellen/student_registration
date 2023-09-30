@@ -6,7 +6,7 @@ const app = express()
 const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ force: false })
   .then(() => {
     console.log("Synced db.");
   })

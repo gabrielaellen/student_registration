@@ -8,6 +8,7 @@ services:
       - db
     volumes:
       - .:/app
+      - /app/node_modules
     networks:
       - student_registration_app_network
   db:

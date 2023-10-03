@@ -2,6 +2,8 @@
 
 This project is a web application created for the subject "Web Frameworks Programming" to manage student registrations.
 
+**Demo:** [https://student-registration-vtzq.onrender.com/](https://student-registration-vtzq.onrender.com/)
+
 ## Project Overview
 
 Node.js Application with Express, PostgreSQL, and Docker Compose for managing student registrations as per the specified requirements.

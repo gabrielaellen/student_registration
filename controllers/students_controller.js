@@ -3,14 +3,20 @@ const Student = db.students;
 const Op = db.Sequelize.Op;
 
 const indexView = (req, res) => {
+    var message = req.session.message;
     Student.findAll()
         .then(data => {
-            res.render("index", { students: data });
+            res.render("index", { students: data, message: message });
+            req.session.message = undefined;
+            req.session.save(err => {
+                if (err) {
+                    throw err;
+                };
+            });
         })
         .catch(err => {
-            res.status(500).send({
-                message: err.message || "Ocorreu algum erro ao lista alunos."
-            });
+            req.session.message = "Ocorreu algum erro ao lista alunos.";
+            res.redirect("/");
         });
 };
 
@@ -49,38 +55,33 @@ const createView = (req, res) => {
 
     Student.create(student)
         .then(data => {
+            req.session.message = "Aluno criado com sucesso!";
             res.redirect("/");
         })
         .catch(err => {
-            res.status(500).send({
-                message: err.message || "Ocorreu algum erro ao criar o Aluno."
-            });
+            req.session.message = "Ocorreu algum erro ao criar o Aluno.";
+            res.redirect("/");
         });
 };
 
 const deleteView = (req, res) => {
     const id = req.params.id;
-    data = Student.findAll()
 
     Student.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
-                res.render("index", {
-                    message: "Aluno excluído com sucesso!", students: data 
-                });
+                req.session.message = "Aluno excluído com sucesso!";
+                res.redirect("/");
             } else {
-                res.render("index", {
-                    message: `Não é possível excluir o aluno com id=${id}. Aluno não encontrado!`,
-                    students: data
-                });
+                req.session.message = `Não é possível excluir o aluno com id=${id}. Aluno não encontrado!`;
+                res.redirect("/");
             }
         })
         .catch(err => {
-            res.status(500).send({
-                message: "Não foi possível excluir o aluno com id=" + id
-            });
+            req.session.message = "Não foi possível excluir o aluno com id=" + id;
+            res.redirect("/");
         });
 
 }

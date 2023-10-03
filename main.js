@@ -21,15 +21,9 @@ app.use(
     session({
         secret: "my secret key",
         saveUninitialized: true,
-        resave: false,
+        resave: true,
     })
 )
-
-app.use((req, res, next) => {
-    res.locals.message = req. session. message;
-    delete req.session.message;
-    next();
-});
 
 app.set('view engine', 'ejs');
 

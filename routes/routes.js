@@ -9,4 +9,6 @@ router.get("/", studentsController.indexView);
 
 router.post("/add", studentsController.createView);
 
+router.get("/delete/:id", studentsController.deleteView);
+
 module.exports = router;

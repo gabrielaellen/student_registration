@@ -9,23 +9,23 @@ const indexView = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Some error occurred while retrieving students."
+                message: err.message || "Ocorreu algum erro ao lista alunos."
             });
         });
 };
 
 const createView = (req, res) => {
-  
+
     const testGradeOne = parseFloat(req.body.test_grade_one);
     const testGradeTwo = parseFloat(req.body.test_grade_two);
 
     if (isNaN(testGradeOne) || isNaN(testGradeTwo)) {
-        return res.status(400).send({ message: "Invalid test grades provided." });
+        return res.status(400).send({ message: "Notas Inválidas." });
     }
 
-    if ((testGradeOne || testGradeTwo) < 0  || (testGradeOne || testGradeTwo) > 10) {
-      return res.status(400).send({ message: "Test grades must be between 0 and 10." });
-  }
+    if ((testGradeOne || testGradeTwo) < 0 || (testGradeOne || testGradeTwo) > 10) {
+        return res.status(400).send({ message: "As notas dos testes devem estar entre 0 e 10." });
+    }
 
     let situation;
     const media = (testGradeOne + testGradeTwo) / 2;
@@ -53,12 +53,40 @@ const createView = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Some error occurred while creating the Student."
+                message: err.message || "Ocorreu algum erro ao criar o Aluno."
             });
         });
 };
 
+const deleteView = (req, res) => {
+    const id = req.params.id;
+    data = Student.findAll()
+
+    Student.destroy({
+        where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.render("index", {
+                    message: "Aluno excluído com sucesso!", students: data 
+                });
+            } else {
+                res.render("index", {
+                    message: `Não é possível excluir o aluno com id=${id}. Aluno não encontrado!`,
+                    students: data
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Não foi possível excluir o aluno com id=" + id
+            });
+        });
+
+}
+
 module.exports = {
     indexView,
     createView,
+    deleteView
 };
